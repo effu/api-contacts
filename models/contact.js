@@ -9,7 +9,7 @@ const contactSchema = new Schema({
   favorite: {
     type: Boolean,
     default: false,
-  }
+  },
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -20,9 +20,11 @@ const contactSchema = new Schema({
 contactSchema.options.toJSON = {
   getters: true,
   virtuals: true,
-  transform: function(doc, ret, options) {
-    delete: ret._id
-    delete: ret.__v
-    return ret
+  transform: function (doc, ret) { // options
+    delete ret._id;
+    delete ret.__v;
+    return ret;
   }
-}
+};
+
+module.exports = mongoose.model('Contact', contactSchema);

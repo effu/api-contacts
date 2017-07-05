@@ -1,29 +1,71 @@
-const express  = require('express');
-const router   = express.Router();
+const express = require('express');
+const router = express.Router();
 
-// read all / index
-router.get('/contacts', function(req, res) {
-    res.json('Contacts - show all');
+const Contact = require('../models/contact');
+
+// Index
+router.get('/contacts', function (req, res) {
+    Contact.find(function (err, contacts) {
+        if (err) {
+            res.json(err);
+        } else {
+            res.json(contacts);
+        }
+    });
 });
 
-// read / view / show
-router.get('/contacts/:id', function(req, res) {
-    res.json('Contacts - view contact matching :id');
+// Show
+router.get('/contacts/:id', function (req, res) {
+    Contact.findById(req.params.id, function (err, contact) {
+        if (err) {
+            res.json(err);
+        } else {
+            res.json(contact);
+        }
+    });
 });
 
-// create contact
-router.post('/contacts', function(req, res) {
-    res.json('Contacts - create contact');
+// Create
+router.post('/contacts', function (req, res) {
+    const contact = new Contact(req.body);
+
+    contact.save(function (err) {
+        if (err) {
+            res.json(err);
+        } else {
+            res.status(201);
+            res.json(contact);
+        }
+    });
 });
 
-// update contact
-router.put('/contacts/:id', function(req, res) {
-    res.json('Contacts - update contact matching :id');
+// Update
+router.put('/contacts/:id', function (req, res) {
+    Contact.findByIdAndUpdate(req.params.id, {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        phone: req.body.phone,
+        favorite: req.body.favorite
+    }, { new: true, runValidators: true }, function (err, contact) {
+        if (err) {
+            res.json(err);
+        } else {
+            res.json(contact);
+        }
+    });
 });
 
-// delete / destroy contact
-router.delete('/contacts/:id', function(req, res) {
-    res.json('Contacts - delete contact matching :id');
+// Destroy
+router.delete('/contacts/:id', function (req, res) {
+    Contact.findByIdAndRemove(req.params.id, function (err, contact) {
+        if (err) {
+            res.json(err);
+        } else {
+            res.json(contact);
+        }
+    });
 });
+
 
 module.exports = router;
