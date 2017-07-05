@@ -12,25 +12,30 @@ app.get('/', function(req, res) {
 });
 
 /**
-  * Contact Routes
+  * Contact Routes - CRUD
   */
 
+// read all / index
 app.get('/contacts', function(req, res) {
     res.json('Contacts - show all');
 });
 
+// read / view / show
 app.get('/contacts/:id', function(req, res) {
     res.json('Contacts - view contact matching :id');
 });
 
+// create contact
 app.post('/contacts', function(req, res) {
     res.json('Contacts - create contact');
 });
 
-app.put('/contacts', function(req, res) {
-    res.json('Contacts - update contact');
+// update contact
+app.put('/contacts/:id', function(req, res) {
+    res.json('Contacts - update contact matching :id');
 });
 
+// delete / destroy contact
 app.delete('/contacts/:id', function(req, res) {
     res.json('Contacts - delete contact matching :id');
 });
